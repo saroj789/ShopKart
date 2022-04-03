@@ -134,3 +134,28 @@ STATICFILES_DIRS = ['greatkart/static' ]
 # meadia file config
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'
+
+
+# To change the default tags for a message level (either built-in or custom), set the MESSAGE_TAGS 
+# setting to a dictionary containing the levels you wish to change. As this extends the default tags,
+# you only need to provide tags for the levels you wish to override:
+# refer message framework in django
+# Typically, message tags are used as CSS classes to customize message style based on message type
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
+
+
+import socket
+socket.getaddrinfo('localhost', 25)
+
+# smtp configuration
+# EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST          = 'smtp.gmail.com'   # this is mot @gmail.com, its .gmail.com
+EMAIL_USE_TLS       = True  # OR EMAIL_USE_SSL
+EMAIL_PORT          = 587       # 465 gor ssl
+EMAIL_HOST_USER     = 'raj7574645@gmail.com'
+EMAIL_HOST_PASSWORD = 'Saroj@72765'
+# DEFAULT_FROM_EMAIL = 'raj7574645@gmail.com'

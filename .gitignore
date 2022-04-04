@@ -133,6 +133,9 @@ ENV/
 env.bak/
 venv.bak/
 
+#venv
+env_greatkart
+
 # Spyder project settings
 .spyderproject
 .spyproject

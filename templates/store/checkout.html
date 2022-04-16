@@ -13,54 +13,54 @@
       <aside class="col-lg-6">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title mb-4">Billing Address</h4>
-            <form action="{% url 'home' %}" method="POST">
-
+            <h4 class="card-title mb-4" title='Spice-"seed"'>Billing Address</h4>
+            <form action="{% url 'place_order' %}" method="POST">
+              {% csrf_token %}
             <div class="form-row">
               <div class="col form-group">
                 <lable for="">First name</lable>
-                  <inpup type='text' name='first_name' class="form-control" required></input>
+                  <input type='text' name='first_name' class="form-control" required></input>
               </div>
               <div class="col form-group">
                 <lable for="">Last name</lable>
-                <inpup type='text' name='last_name' class="form-control" required></input>
+                <input type='text' name='last_name' class="form-control" required></input>
               </div>
             </div>
 
             <div class="form-row">
               <div class="col form-group">
                 <lable for="">Email </lable>
-                <inpup type='text' name='email' class="form-control" required></input>
+                <input type='text' name='email' class="form-control" required></input>
               </div>
               <div class="col form-group">
                 <lable for="">Phone Number </lable>
-                <inpup type='text' name='phone_number' class="form-control" required></input>
+                <input type='text' name='phone' class="form-control" required></input>
               </div>
             </div>
 
             <div class="form-row">
               <div class="col form-group">
                 <lable for="">Address Line 1</lable>
-                <inpup type='text' name='address_line_1' class="form-control" required></input>
+                <input type='text' name='address_line_1' class="form-control" required></input>
               </div>
               <div class="col form-group">
                 <lable for="">Address Line 2</lable>
-                <inpup type='text' name='address_line_2' class="form-control" ></input>
+                <input type='text' name='address_line_2' class="form-control" ></input>
               </div>
             </div>
 
             <div class="form-row">
               <div class="col form-group">
                 <lable for="">City</lable>
-                <inpup type='text' name='city' class="form-control" required></input>
+                <input type='text' name='city' class="form-control" required></input>
               </div>
               <div class="col form-group">
                 <lable for="">State</lable>
-                <inpup type='text' name='state' class="form-control" required></input>
+                <input type='text' name='state' class="form-control" required></input>
               </div>
               <div class="col form-group">
                 <lable for="">Country</lable>
-                <inpup type='text' name='country' class="form-control" required></input>
+                <input type='text' name='country' class="form-control" required></input>
               </div>
             </div>
 

@@ -46,8 +46,6 @@ class Product(models.Model):
 
 
 
-
-
 class VariationManager(models.Manager):
   def colors(self):
     return super(VariationManager, self).filter(variation_category='color', is_active=True)
@@ -88,3 +86,29 @@ class ReviewRating(models.Model):
 
   def __str__(self):
     return self.subject
+
+
+
+
+
+
+
+class ProductGallery(models.Model):
+
+  def get_url(self,filename=None):
+    print(filename)
+    url = 'store/products/'+ self.product.slug + '/' + filename
+    return url
+  
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  image = models.ImageField(upload_to=get_url, max_length=255)
+
+  class Meta:
+    verbose_name = "productgallery"
+    verbose_name_plural = "product gallery"
+
+  def __str__(self):
+    return self.product.product_name
+  
+  
+

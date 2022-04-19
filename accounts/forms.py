@@ -1,5 +1,5 @@
 from django import forms
-from .models import Account
+from .models import Account, UserProfile
 
 
 class RegistrationForm(forms.ModelForm):
@@ -46,5 +46,35 @@ class RegistrationForm(forms.ModelForm):
       # if you need to. If you want to attach errors to a specific field in the form, you need to call add_error().
       self.add_error('password',forms.ValidationError('Password does not match!')  )
 
-    print(self.errors, self.non_field_errors )
+    # print(self.errors, self.non_field_errors )
+    
+
+
+class UserForm(forms.ModelForm):
+  class Meta:
+    model = Account
+    fields = ('first_name', 'last_name', 'phone_nuber')
+
+  def __init__(self, *args, **kwargs):
+    super(UserForm, self).__init__(*args,**kwargs)
+    for field in self.fields:
+      classes = self.fields[field].widget.attrs.get('class','')   # check if some classes have,if no class attr , assign it ' '.
+      self.fields[field].widget.attrs['class'] =  classes + 'form-control'
+
+
+
+class UserProfileForm(forms.ModelForm):
+
+  profile_picture = forms.ImageField(required=False, error_messages= {'Invalid Error':('Image files only')}, widget=forms.FileInput)
+
+  class Meta:
+    model = UserProfile
+    fields = ('address_line_1', 'address_line_2', 'city', 'state', 'country', 'profile_picture')
+
+  def __init__(self, *args, **kwargs):
+    super(UserProfileForm, self).__init__(*args,**kwargs)
+    for field in self.fields:
+      classes = self.fields[field].widget.attrs.get('class','')   # check if some classes have,if no class attr , assign it ' '.
+      self.fields[field].widget.attrs['class'] =  classes + 'form-control'
+
     

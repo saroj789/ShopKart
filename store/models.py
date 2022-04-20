@@ -66,7 +66,7 @@ class Variation(models.Model):
   is_active           = models.BooleanField(default=True)
   created_date        = models.DateTimeField(auto_now_add=True)
 
-  objects = VariationManager()   # telling the model that we have created model for you
+  objects = VariationManager()   # telling the model that we have created manager for you
   
   def __str__(self):
     return self.variation_value
@@ -96,7 +96,6 @@ class ReviewRating(models.Model):
 class ProductGallery(models.Model):
 
   def get_url(self,filename=None):
-    print(filename)
     url = 'store/products/'+ self.product.slug + '/' + filename
     return url
   

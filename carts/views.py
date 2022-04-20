@@ -21,10 +21,10 @@ def add_cart(request,product_id):
   current_user  = request.user
   product = Product.objects.get(id=product_id) #get the product
 
+  print('is_user authenticated : ',current_user.is_authenticated)
 
-  print('is_authenticated : ',current_user.is_authenticated)
+  # (same as unauthenticating(see below), only change - cart to user)
   # IF USER IS AUTHENTICATED  
-  # (same as unauthenticating chamge : cart to user)
   if current_user.is_authenticated:
     product_variation = []
 
@@ -34,13 +34,13 @@ def add_cart(request,product_id):
         try :
           variation = Variation.objects.get(product=product,variation_category__iexact=key, variation_value__iexact= val)
           product_variation.append(variation )
-        except :
-          pass  
+        except Exception as e :
+          print('Exception : ',e)
 
     #  check cart_items with this product (doesnt matter varient)
     is_cart_item_exists =  CartItem.objects.filter(product=product, user=current_user).exists()
 
-    print("Product : ",product,' product_variation : ',product_variation, "  is_cart_item_exists : ", is_cart_item_exists)
+    # print("Product : ",product,' product_variation : ',product_variation, "  is_cart_item_exists : ", is_cart_item_exists)
     #  if product already have in cart_item
     if is_cart_item_exists:
       cart_items = CartItem.objects.filter(product=product, user=current_user)   # save product as CartItem in Cart # get cartitems with all varient of same product
@@ -54,7 +54,7 @@ def add_cart(request,product_id):
         ex_var_list.append( list(existing_variations))
         cart_items_id.append(item.id)
 
-      print('ex_var_list : ',ex_var_list, " cart_items_id : ",cart_items_id)
+      # print('ex_var_list : ',ex_var_list, " cart_items_id : ",cart_items_id)
       # if product_variation is in existing product variation ,get the cart_item  using itemid and increase quantity 
       if product_variation in ex_var_list:
         index= ex_var_list.index(product_variation)
@@ -62,7 +62,7 @@ def add_cart(request,product_id):
         item = CartItem.objects.get(product=product,id=item_id )
         item.quantity += 1
         item.save()
-        print('item : ',item, item.quantity)
+        # print('item : ',item, item.quantity)
 
       # create new cart_item and add variation
       else:
@@ -105,15 +105,15 @@ def add_cart(request,product_id):
         try :
           variation = Variation.objects.get(product=product,variation_category__iexact=key, variation_value__iexact= val)
           product_variation.append(variation )
-        except :
-          pass
+        except Exception as e :
+          print('Exception : ',e)
 
     try:
       cart = Cart.objects.get( cart_id=_get_cart_id(request) ) # get the cart using cart_id present in session
     except Cart.DoesNotExist:
       cart =Cart.objects.create( 
         cart_id = _get_cart_id(request) 
-        )  # if user does not hsve cart lets create it and save it
+        )                                         # if user does not hsve cart lets create it and save it with session key
     cart.save()  
 
     is_cart_item_exists =  CartItem.objects.filter(product=product, cart=cart).exists()

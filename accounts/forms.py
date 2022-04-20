@@ -37,7 +37,6 @@ class RegistrationForm(forms.ModelForm):
     cleaned_data = super(RegistrationForm, self).clean()
     password = cleaned_data.get('password')
     confirm_password = cleaned_data.get('confirm_password')
-    print('cleane method')
     if password != confirm_password:
       # raise forms.ValidationError('Password does not match!')
       #   

@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block script %}
+  <!-- Include the PayPal JavaScript SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AZ7xAY66zYWL0Pncu7nxVwowvq8hKOfawd811nvaCRTJZeuAmXIWOPRM3N2XnxBEm9g9VZkhE2Bw0OSz&currency=USD"></script>
+{% endblock script %}
+
+
 {% block content %}
 
 <section class="section-content padding-y bg">

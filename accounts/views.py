@@ -16,6 +16,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.core.mail import send_mail
+from .decorators import unauthenticated_user
 
 # CHECK CART  
 from carts.models import Cart, CartItem
@@ -26,7 +27,7 @@ import requests
 
 
 # Create your views here.
-
+@unauthenticated_user
 def register(request):
   if request.method == "POST":
     form = RegistrationForm(request.POST)
@@ -55,23 +56,12 @@ def register(request):
               }) 
       to_email = email
       send_email = EmailMessage(mail_subject, message, to=[to_email])
-      # try:
-        # send_email = EmailMessage(subject=mail_subject, body=message, from_email='raj7574645@gmail.com', to=[to_email])
-      # except Exception as e:
-        # print("errpe : ",e)
       send_email.send()
 
-      # messages.success(request,'Thank you for registering with us. We have sent you a varification mail to your email address. Please varify it.')
       return redirect('/accounts/login?command=varification&email='+email)
 
-
     # do not handle else cond of is_valid(), othewiser forms.error will not work.
-    # django auto handle, check user already exist or anot and other thing
-
-    # else:
-    #   messages.error(request,'Invalid form')
-    #   return redirect('register')
-    
+    # django auto handle, check user already exist or not and other thing
   
   else:
     form = RegistrationForm()
@@ -84,6 +74,7 @@ def register(request):
 
 
 
+@unauthenticated_user
 def login(request):
   if request.method == "POST":
     email = request.POST['email']
@@ -206,7 +197,7 @@ def dashboard(request):
   return render(request,'accounts/dashboard.html', context)
 
 
-
+# @unauthenticated_user
 def forgotPassword(request):
   if request.method == 'POST':
     email = request.POST['email']
@@ -225,8 +216,8 @@ def forgotPassword(request):
       to_email = email
       send_email = EmailMessage(mail_subject, message, to=[to_email])
       send_email.send()
-
-      messages.success(request, 'passwor reset email has been sent to your email address.')
+      messages.success(request, 'password reset link has been sent to your email address.')
+    
       return redirect('login')
 
     else:
@@ -266,7 +257,8 @@ def resetPassword(request):
         user.save()
         messages.success(request,'Password reset successfull')
         return redirect(login)
-      except:                                                             #mine
+      except Exception as e :
+        print('Exception : ',e)                                                           #mine
         messages.error(request,'something went wrong ! try to reset again')
         return redirect('forgotPassword')
 
@@ -327,10 +319,10 @@ def change_password(request):
       if success:
         user.set_password(new_password)
         user.save()
-        
         messages.success(request,"Password updated successfully. ")
-        # auth.logout()       # to logout user  # django will auto logout when we change password
-        return redirect('change_password')
+        
+        # to logout user  # django will auto logout and redirect to login when we change password
+        return redirect('home')
       else:
         messages.error(request,"Please enter valid current password.")
         return redirect('change_password')

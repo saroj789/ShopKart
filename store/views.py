@@ -22,18 +22,14 @@ def store(request, category_slug=None):
     products    = Product.objects.filter(category=category,is_available=True).order_by('id')
     product_count = products.count()
 
-    # paginator
-    paginator      =  Paginator(products, 1) 
-    page           =  request.GET.get('page')
-    paged_product  =  paginator.get_page(page)
   else:
     products = Product.objects.filter(is_available=True).order_by('id')
     product_count  = products.count()
 
-    # paginator
-    paginator      =  Paginator(products, 6) 
-    page           =  request.GET.get('page')
-    paged_product  =  paginator.get_page(page)
+  # paginator
+  paginator      =  Paginator(products, 6)
+  page           =  request.GET.get('page')
+  paged_product  =  paginator.get_page(page)
 
   context= {
     'products'     :paged_product,
@@ -47,7 +43,9 @@ def product_detail(request,category_slug, product_slug):
     single_product = Product.objects.get( category__slug=category_slug, slug=product_slug)
     in_cart = CartItem.objects.filter( cart__cart_id=_get_cart_id(request) , product=single_product ).exists()
   except Exception as e:
-    raise e
+    print('exception : ',e)
+    # raise e
+    return redirect('store')
 
 
   # check user has purchased before or not (for giving option to give rating and review)
@@ -79,9 +77,9 @@ def product_detail(request,category_slug, product_slug):
 def search(request):
   if 'keyword' in request.GET:
     keyword = request.GET['keyword']
-    print('hii',keyword)
+    
     if keyword :
-      # ? complex query
+      #  complex query
       products = Product.objects.order_by('-created_date').filter( Q(Description__icontains = keyword) | Q(product_name__icontains = keyword)  )
       product_count  = products.count()
     else:

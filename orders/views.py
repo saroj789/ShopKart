@@ -8,14 +8,16 @@ from store.models import Product
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='login')
 def payments(request):
   try:
     body = json.loads(request.body)
-  except Exception as e:           #mine
+  except Exception as e:           #mine 
     print(e)
-    return redirect('checkout')
+    return redirect('checkout')   # this method can work without @login_required 
 
   order = Order.objects.get(user=request.user, is_ordered = False, order_number=body['orderID'])
   # store transaction details inside payments model
@@ -95,12 +97,11 @@ def _generate_data_number(order_id):
   return order_number
 
 
-
-
+@login_required(login_url='login')
 def place_order(request):
   current_user = request.user
 
-  cart_items = CartItem.objects.filter(user=current_user)
+  cart_items = CartItem.objects.filter(user=current_user)   # it was giving exception if user not logged in so @login_required 
   item_count = cart_items.count()
   if item_count <=0 :
     return redirect('store')
@@ -164,6 +165,7 @@ def place_order(request):
   return redirect('payments')
 
 
+@login_required(login_url='login')
 def order_complete(request):
   order_number = request.GET.get('order_number')
   transID = request.GET.get('payment_id')

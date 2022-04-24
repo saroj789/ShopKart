@@ -18,7 +18,8 @@
 
           <ul class="thumb">
             <li>
-              <a href="{{img.image.url}}" target="mainImage"> <img src="{{single_product.image.url}}" alt="Prouct Image">
+              <a href="{{single_product.image.url}}" target="mainImage"> <img src="{{single_product.image.url}}" alt="Prouct Image">
+              </a>
 
               {% for img in product_gallery  %}
                 <a href="{{img.image.url}}" target="mainImage"> <img src="{{img.image.url}}" alt="Prouct Image">

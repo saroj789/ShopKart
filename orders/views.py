@@ -73,7 +73,13 @@ def payments(request):
   to_email = request.user.email
 
   send_email = EmailMessage(mail_subject, message, to=[to_email])
-  send_email.send()
+
+  # sometimes send email has some issue like (smtplib.SMTPAuthenticationError)
+  try:
+    send_email.send()
+  except Exception as e:
+    print('Exception : ',e)
+    messages.success(request,'Please note the order details')
 
 
   # send order no and trans ID back to sendData methon via jsonresponse

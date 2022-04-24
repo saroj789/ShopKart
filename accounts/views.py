@@ -43,7 +43,7 @@ def register(request):
 
       user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password ) 
       user.phone_nuber =  phone_number
-      user.save() 
+      # user.save() 
 
       # user activation
       current_site = get_current_site(request)
@@ -56,7 +56,15 @@ def register(request):
               }) 
       to_email = email
       send_email = EmailMessage(mail_subject, message, to=[to_email])
-      send_email.send()
+
+      #sometimes send email has some issue on production srver(smtplib.SMTPAuthenticationError)
+      try:
+        send_email.send()
+        user.save()                                 # after succesfully email sent then save user
+      except Exception as e:
+        print('Exception : ',e)
+        messages.success(request,'Some issue while creating account, please try after sometime.')
+        return redirect('register')
 
       return redirect('/accounts/login?command=varification&email='+email)
 
@@ -215,9 +223,15 @@ def forgotPassword(request):
               }) 
       to_email = email
       send_email = EmailMessage(mail_subject, message, to=[to_email])
-      send_email.send()
-      messages.success(request, 'password reset link has been sent to your email address.')
-    
+
+      # sometimes send email has some issue like (smtplib.SMTPAuthenticationError)
+      try:
+        send_email.send()
+        messages.success(request, 'password reset link has been sent to your email address.')
+      except Exception as e:
+        print('Exception : ',e)
+        messages.error(request,'We are unable to send password reset link , please try after sometime.')
+
       return redirect('login')
 
     else:

@@ -136,7 +136,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = config("TIME_ZONE", default='UTC')  # you can change in config
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
 

@@ -296,10 +296,16 @@ def my_orders(request):
 
 @login_required(login_url='login')
 def edit_profile(request):
-  userprofile = get_object_or_404(UserProfile, user=request.user)
+  try:
+    userprofile = UserProfile.objects.get(user=request.user)
+  except Exception as e:
+    userprofile = UserProfile(user=request.user)
+    print("Exception : ",e)
+
   if request.method == "POST":
     user_form = UserForm(request.POST, instance=request.user)
     profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+  
     if user_form.is_valid() and profile_form.is_valid():
       user_form.save()
       profile_form.save()

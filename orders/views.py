@@ -9,6 +9,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 @login_required(login_url='login')
